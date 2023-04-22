@@ -60,29 +60,11 @@ struct NodeInt : public Node {
 /**
     Node for variable assignments
 */
-struct NodeDeclInt : public Node {
+struct NodeDecl : public Node {
     std::string identifier;
     Node *expression;
 
-    NodeDeclInt(std::string id, Node *expr);
-    std::string to_string();
-    llvm::Value *llvm_codegen(LLVMCompiler *compiler);
-};
-
-struct NodeDeclLong : public Node {
-    std::string identifier;
-    Node *expression;
-
-    NodeDeclLong(std::string id, Node *expr);
-    std::string to_string();
-    llvm::Value *llvm_codegen(LLVMCompiler *compiler);
-};
-
-struct NodeDeclShort : public Node {
-    std::string identifier;
-    Node *expression;
-
-    NodeDeclShort(std::string id, Node *expr);
+    NodeDecl(std::string id, Node *expr);
     std::string to_string();
     llvm::Value *llvm_codegen(LLVMCompiler *compiler);
 };
