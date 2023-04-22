@@ -28,8 +28,7 @@ int yyerror(std::string msg);
 %token TPLUS TDASH TSTAR TSLASH
 %token <lexeme> TINT_LIT TIDENT
 %token INT TLET TDBG
-%token TSCOL TLPAREN TRPAREN TEQUAL TCOL
-%token TSHORT TLONG TINT
+%token TSCOL TLPAREN TRPAREN TEQUAL
 
 %type <node> Expr Stmt
 %type <stmts> Program StmtList
@@ -51,7 +50,7 @@ StmtList : Stmt
          { $$->push_back($3); }
 	     ;
 
-Stmt : TLET TIDENT TCOL TINT TEQUAL Expr
+Stmt : TLET TIDENT TEQUAL Expr
      {
         if(symbol_table.contains($2)) {
             // tried to redeclare variable, so error
@@ -59,33 +58,9 @@ Stmt : TLET TIDENT TCOL TINT TEQUAL Expr
         } else {
             symbol_table.insert($2);
 
-            $$ = new NodeDeclInt($2, $6);
+            $$ = new NodeDecl($2, $4);
         }
      }
-
-     | TLET TIDENT TCOL TSHORT TEQUAL Expr
-     {
-        if(symbol_table.contains($2)) {
-            // tried to redeclare variable, so error
-            yyerror("tried to redeclare variable.\n");
-        } else {
-            symbol_table.insert($2);
-
-            $$ = new NodeDeclShort($2, $6);
-        }
-     }
-     | TLET TIDENT TCOL TLONG TEQUAL Expr
-     {
-        if(symbol_table.contains($2)) {
-            // tried to redeclare variable, so error
-            yyerror("tried to redeclare variable.\n");
-        } else {
-            symbol_table.insert($2);
-
-            $$ = new NodeDeclLong($2, $6);
-        }
-     }
-
      | TDBG Expr
      { 
         $$ = new NodeDebug($2);
@@ -118,3 +93,6 @@ int yyerror(std::string msg) {
     std::cerr << "Error! " << msg << std::endl;
     exit(1);
 }
+
+
+THIS IS JUST A CHECK TO SEE IF THE SYSTEM FREAKS OUT. LALALAALAAALLAALAALAAL

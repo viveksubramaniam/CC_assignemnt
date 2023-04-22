@@ -1,3 +1,2 @@
-let abc : short = 10000+20-100*10;
-
-dbg abc;
+let abc = 123 * 20 + 20 + (22 / 2) - 3;
+dbg abc + abc;
