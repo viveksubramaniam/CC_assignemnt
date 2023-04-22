@@ -105,6 +105,7 @@ Value *NodeInt::llvm_codegen(LLVMCompiler *compiler) {
     return compiler->builder.getInt32(value);
 }
 
+
 Value *NodeBinOp::llvm_codegen(LLVMCompiler *compiler) {
     Value *left_expr = left->llvm_codegen(compiler);
     Value *right_expr = right->llvm_codegen(compiler);
@@ -122,7 +123,7 @@ Value *NodeBinOp::llvm_codegen(LLVMCompiler *compiler) {
 }
 
 
-Value *NodeDecl::llvm_codegen(LLVMCompiler *compiler) {
+Value *NodeDeclInt::llvm_codegen(LLVMCompiler *compiler) {
     Value *expr = expression->llvm_codegen(compiler);
 
     IRBuilder<> temp_builder(
@@ -136,7 +137,34 @@ Value *NodeDecl::llvm_codegen(LLVMCompiler *compiler) {
 
     return compiler->builder.CreateStore(expr, alloc);
 }
+Value *NodeDeclShort::llvm_codegen(LLVMCompiler *compiler) {
+    Value *expr = expression->llvm_codegen(compiler);
 
+    IRBuilder<> temp_builder(
+        &MAIN_FUNC->getEntryBlock(),
+        MAIN_FUNC->getEntryBlock().begin()
+    );
+
+    AllocaInst *alloc = temp_builder.CreateAlloca(compiler->builder.getInt32Ty(), 0, identifier);
+
+    compiler->locals[identifier] = alloc;
+
+    return compiler->builder.CreateStore(expr, alloc);
+}
+Value *NodeDeclLong::llvm_codegen(LLVMCompiler *compiler) {
+    Value *expr = expression->llvm_codegen(compiler);
+
+    IRBuilder<> temp_builder(
+        &MAIN_FUNC->getEntryBlock(),
+        MAIN_FUNC->getEntryBlock().begin()
+    );
+
+    AllocaInst *alloc = temp_builder.CreateAlloca(compiler->builder.getInt32Ty(), 0, identifier);
+
+    compiler->locals[identifier] = alloc;
+
+    return compiler->builder.CreateStore(expr, alloc);
+}
 Value *NodeIdent::llvm_codegen(LLVMCompiler *compiler) {
     AllocaInst *alloc = compiler->locals[identifier];
 
